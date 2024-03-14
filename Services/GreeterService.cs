@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Ozon.Route256.ProductService.Api;
 using OzonGrpc;
 
 namespace OzonGrpc.Services;
