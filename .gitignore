@@ -5,6 +5,7 @@
 
 
 [Pp]rotos/google/
+[Pp]rotos/google/api/
 # User-specific files
 .idea
 *.rsuser
