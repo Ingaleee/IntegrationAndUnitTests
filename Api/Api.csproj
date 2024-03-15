@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
 </Project>

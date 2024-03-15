@@ -1,4 +1,4 @@
-using OzonGrpc.Services;
+using OzonGrpc.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +16,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<ProductService>();
 
 app.Run();

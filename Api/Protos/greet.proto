@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Ozon.Route256.ProductService.Api";
+option csharp_namespace = "OzonGrpc.ProductService.Api";
 import "google/api/annotations.proto";
 
 package greet;

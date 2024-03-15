@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option csharp_namespace = "OzonGrpc.ProductService.Api";
+import "google/api/annotations.proto";
+
+package greet;
+
+// The greeting service definition.
+service Products {
+}
