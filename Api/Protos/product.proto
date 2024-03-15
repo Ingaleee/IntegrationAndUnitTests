@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-package greet;
+package products;
 
 // The greeting service definition.
 service ProductService {
