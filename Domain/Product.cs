@@ -1,8 +1,8 @@
-﻿namespace Domain;
+﻿namespace OzonGrpc.Domain;
 
 public class Product
 {
-    public long Id { get; set; }
+    public ulong Id { get; set; }
     public string Name { get; set; }
     public float Weight { get; set; }
     public ProductCategory Category { get; set; }

@@ -1,10 +1,10 @@
-﻿using Domain;
+﻿using OzonGrpc.Domain;
 
 namespace OzonGrpc.Api.Dto;
 
-public class ProductDto
+public class GetProductDto
 {
-    public long Id { get; set; }
+    public ulong Id { get; set; }
     public string Name { get; set; }
     public float Weight { get; set; }
     public ProductCategory Category { get; set; }

@@ -2,9 +2,82 @@ syntax = "proto3";
 
 option csharp_namespace = "OzonGrpc.ProductService.Api";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 package greet;
 
 // The greeting service definition.
-service Products {
+service ProductService {
+  rpc Add (AddProductRequest) returns (AddProductResponse){
+    option (google.api.http) = {
+      get: "/v1/product/add"
+    };
+  };
+
+  rpc Update (UpdateProductRequest) returns (UpdateProductResponse){
+    option (google.api.http) = {
+      put: "/v1/product/update"
+      body: "*"
+    };
+  };
+
+  rpc GetById (GetProductByIdRequest) returns (GetProductResponse){
+    option (google.api.http) = {
+      get: "/v1/product/{id}"
+    };
+  };
+  
+  rpc List (google.protobuf.Empty) returns (ListProductResponse){
+    option (google.api.http) = {
+      get: "/v1/product/list"
+    };
+  };
+}
+
+message AddProductRequest {
+  string name = 1;
+  float weight = 2;
+  ProductCategory category = 3;
+  int64 warehouse_id = 4;
+}
+
+message AddProductResponse {
+  uint64 id = 1;
+}
+
+message UpdateProductRequest {
+  uint64 id = 1;
+  string name = 2;
+  float weight = 3;
+  ProductCategory category = 4;
+  int64 warehouse_id = 5;
+}
+
+message UpdateProductResponse {
+  bool success = 1;
+}
+
+message GetProductByIdRequest {
+  uint64 id = 1;
+}
+
+message GetProductResponse {
+  uint64 id = 1;
+  string name = 2;
+  float weight = 3;
+  ProductCategory category = 4;
+  google.protobuf.Timestamp created_utc = 5;
+  int64 warehouse_id = 6;
+}
+
+message ListProductResponse {
+  repeated GetProductResponse products = 1;
+}
+
+enum ProductCategory {
+  General = 0;
+  HouseholdChemicals = 1;
+  Appliances = 2;
+  Groceries = 3;
 }
