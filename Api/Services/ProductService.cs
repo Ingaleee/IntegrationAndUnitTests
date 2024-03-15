@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using Api.Filters;
+using OzonGrpc.Infrastructure;
 using OzonGrpc.Api.Dto;
 using OzonGrpc.Domain;
 
@@ -25,6 +26,7 @@ public class ProductService : IProductService
             Name = dto.Name,
             WarehouseId = dto.WarehouseId,
             Weight = dto.Weight,
+            Price = dto.Price,
             Category = dto.Category,
             CreatedUtc = DateTime.UtcNow,
         };
@@ -51,6 +53,7 @@ public class ProductService : IProductService
             Name = dto.Name ?? product.Name,
             WarehouseId = dto.WarehouseId ?? product.WarehouseId,
             Weight = dto.Weight ?? product.Weight,
+            Price = dto.Price ?? product.Price,
             Category = dto.Category ?? product.Category,
             CreatedUtc = product.CreatedUtc
         };
@@ -58,9 +61,45 @@ public class ProductService : IProductService
         return _repository.Update(updatedProduct);
     }
 
-    public ICollection<GetProductDto> Get()
+    public IEnumerable<GetProductDto> Get(ListProductQuery query)
     {
-        throw new NotImplementedException();
+        var products = _repository.Get();
+
+        if (query.WarehouseId.HasValue)
+        {
+            products = products.Where(p => p.WarehouseId == query.WarehouseId.Value);
+        }
+
+        if (query.CreatedUtc.HasValue)
+        {
+            products = products.Where(p => p.CreatedUtc == query.CreatedUtc.Value);
+        }
+
+        if (query.Category.HasValue)
+        {
+            products = products.Where(p => p.Category == query.Category.Value);
+        }
+        
+        if (query.Skip != 0)
+        {
+            products = products.Skip((int)query.Skip);
+        }
+
+        if (query.Take.HasValue)
+        {
+            products = products.Take((int)query.Take.Value);
+        }
+
+        return products.Select(p => new GetProductDto
+        {
+            Id = p.Id,
+            Category = p.Category,
+            CreatedUtc = p.CreatedUtc,
+            Name = p.Name,
+            Price = p.Price,
+            WarehouseId = p.WarehouseId,
+            Weight = p.Weight
+        });
     }
 
     public GetProductDto? GetById(ulong id)
@@ -81,6 +120,7 @@ public class ProductService : IProductService
             Id = entity.Id,
             Name = entity.Name,
             WarehouseId = entity.WarehouseId,
+            Price = entity.Price,
             Weight = entity.Weight,
             Category = entity.Category,
             CreatedUtc = entity.CreatedUtc

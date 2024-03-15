@@ -1,8 +1,11 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Api.Extensions;
+using Api.Filters;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using OzonGrpc.Api.Dto;
 using OzonGrpc.Api.Services;
 using OzonGrpc.ProductService.Api;
+using Enum = System.Enum;
 using ProductCategory = OzonGrpc.Domain.ProductCategory;
 
 namespace OzonGrpc.Api.Grpc;
@@ -22,6 +25,7 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
         {
             Name = request.Name,
             Weight = request.Weight,
+            Price = (decimal)request.Price, 
             Category = (Domain.ProductCategory)request.Category,
             WarehouseId = request.WarehouseId
         };
@@ -36,6 +40,7 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
             Id = request.Id,
             Name = request.Name,
             Weight = request.Weight,
+            Price = (decimal)request.Price,
             Category = (Domain.ProductCategory?)request.Category,
             WarehouseId = request.WarehouseId
         };
@@ -49,6 +54,7 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
             Id = dto.Id,
             Name = dto.Name,
             Weight = dto.Weight,
+            Price = dto.Price,
             Category = category,
             WarehouseId = dto.WarehouseId ?? 0
         });
@@ -71,6 +77,7 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
             Id = dto.Id,
             Name = dto.Name,
             Weight = dto.Weight,
+            Price = (double)dto.Price,
             Category = (ProductService.Api.ProductCategory)dto.Category,
             CreatedUtc = Timestamp.FromDateTime(dto.CreatedUtc),
             WarehouseId = dto.WarehouseId
@@ -79,11 +86,12 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
         return Task.FromResult(response);
     }
     
-    public override Task<ListProductResponse> List(Empty request, ServerCallContext context)
+    public override Task<ListProductResponse> List(ListProductQueryRequest request, ServerCallContext context)
     {
-        var dtos = _productService.Get();
+        var query = request.ToQuery();
+        var dtos = _productService.Get(query);
         var response = new ListProductResponse();
-
+    
         foreach (var dto in dtos)
         {
             response.Products.Add(new GetProductResponse
@@ -91,12 +99,13 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
                 Id = dto.Id,
                 Name = dto.Name,
                 Weight = dto.Weight,
+                Price = (double)dto.Price,
                 Category = (ProductService.Api.ProductCategory)dto.Category,
                 CreatedUtc = Timestamp.FromDateTime(dto.CreatedUtc),
                 WarehouseId = dto.WarehouseId
             });
         }
-
+    
         return Task.FromResult(response);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using OzonGrpc.Domain;
 
-namespace Infrastructure;
+namespace OzonGrpc.Infrastructure;
 
 public class ProductRepository : IProductRepository
 {
@@ -58,7 +58,7 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public ICollection<Product> Get()
+    public IEnumerable<Product> Get()
     {
         return _data.Values.ToList();
     }

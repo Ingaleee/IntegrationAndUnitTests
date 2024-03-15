@@ -28,7 +28,7 @@ service ProductService {
     };
   };
   
-  rpc List (google.protobuf.Empty) returns (ListProductResponse){
+  rpc List (ListProductQueryRequest) returns (ListProductResponse){
     option (google.api.http) = {
       get: "/v1/product/list"
     };
@@ -38,8 +38,9 @@ service ProductService {
 message AddProductRequest {
   string name = 1;
   float weight = 2;
-  ProductCategory category = 3;
-  int64 warehouse_id = 4;
+  double price = 3;
+  ProductCategory category = 4;
+  int64 warehouse_id = 5;
 }
 
 message AddProductResponse {
@@ -49,9 +50,10 @@ message AddProductResponse {
 message UpdateProductRequest {
   uint64 id = 1;
   string name = 2;
-  float weight = 3;
-  ProductCategory category = 4;
-  int64 warehouse_id = 5;
+  double price = 3;
+  float weight = 4;
+  ProductCategory category = 5;
+  int64 warehouse_id = 6;
 }
 
 message UpdateProductResponse {
@@ -65,10 +67,19 @@ message GetProductByIdRequest {
 message GetProductResponse {
   uint64 id = 1;
   string name = 2;
-  float weight = 3;
-  ProductCategory category = 4;
-  google.protobuf.Timestamp created_utc = 5;
-  int64 warehouse_id = 6;
+  double price = 3;
+  float weight = 4;
+  ProductCategory category = 5;
+  google.protobuf.Timestamp created_utc = 6;
+  int64 warehouse_id = 7;
+}
+
+message ListProductQueryRequest {
+  int64 warehouse_id = 1;
+  string category = 2;
+  google.protobuf.Timestamp created_utc = 3;
+  uint32 skip = 4;
+  uint32 take = 5;
 }
 
 message ListProductResponse {
