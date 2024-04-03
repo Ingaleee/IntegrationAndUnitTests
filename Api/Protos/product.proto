@@ -7,11 +7,12 @@ import "google/protobuf/empty.proto";
 
 package products;
 
-// The greeting service definition.
+
 service ProductService {
-  rpc Add (AddProductRequest) returns (AddProductResponse){
+  rpc Add (AddProductRequest) returns (AddProductResponse) {
     option (google.api.http) = {
-      get: "/v1/product/add"
+      post: "/v1/product/add",
+      body: "*"
     };
   };
 

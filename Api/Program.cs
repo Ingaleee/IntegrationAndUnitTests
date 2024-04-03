@@ -31,3 +31,8 @@ if (app.Environment.IsDevelopment())
 app.MapGrpcService<ProductServiceGrpc>();
 
 app.Run();
+
+
+public partial class Program
+{
+}

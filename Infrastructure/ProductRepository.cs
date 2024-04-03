@@ -6,14 +6,14 @@ namespace OzonGrpc.Infrastructure;
 public class ProductRepository : IProductRepository
 {
     private readonly ConcurrentDictionary<ulong, Product> _data = new();
-    
+
     public bool Update(Product? product)
     {
         if (product is null)
         {
             return false;
         }
-        
+
         var isExists = _data.ContainsKey(product.Id);
         if (!isExists)
         {
@@ -33,7 +33,7 @@ public class ProductRepository : IProductRepository
 
         var id = (ulong)_data.Count + 1;
         product.Id = id;
-        
+
         if (!_data.TryAdd(id, product))
         {
             return 0;

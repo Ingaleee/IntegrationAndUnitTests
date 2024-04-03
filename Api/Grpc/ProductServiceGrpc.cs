@@ -5,7 +5,6 @@ using Grpc.Core;
 using OzonGrpc.Api.Dto;
 using OzonGrpc.Api.Services;
 using OzonGrpc.ProductService.Api;
-using Enum = System.Enum;
 using ProductCategory = OzonGrpc.Domain.ProductCategory;
 
 namespace OzonGrpc.Api.Grpc;
@@ -61,17 +60,22 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
 
         return Task.FromResult(new UpdateProductResponse { Success = success });
     }
-    
+
     public override Task<GetProductResponse> GetById(GetProductByIdRequest request, ServerCallContext context)
     {
         var id = request.Id;
         var dto = _productService.GetById(id);
-    
+
         if (dto == null)
         {
-            throw new RpcException(new Status(StatusCode.NotFound, $"Product with id {id} not found"));
+            var metadata = new Metadata
+        {
+            { "Target", "Product" },
+            { "Message", $"Product with id {id} not found" }
+        };
+            throw new RpcException(new Status(StatusCode.NotFound, "Product not found"), metadata);
         }
-    
+
         var response = new GetProductResponse
         {
             Id = dto.Id,
@@ -82,10 +86,12 @@ public class ProductServiceGrpc : ProductService.Api.ProductService.ProductServi
             CreatedUtc = Timestamp.FromDateTime(dto.CreatedUtc),
             WarehouseId = dto.WarehouseId
         };
-    
+
         return Task.FromResult(response);
     }
-    
+
+
+
     public override Task<ListProductResponse> List(ListProductQueryRequest request, ServerCallContext context)
     {
         var query = request.ToQuery();
